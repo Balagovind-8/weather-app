@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weatherly | Modern Weather App</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="wrapper">
+    <header class="header">
+      <h1 class="logo">Weatherly</h1>
+      <form id="search-form" class="search-box">
+        <input
+          type="text"
+          id="city-input"
+          placeholder="🔍 Enter city name..."
+          required
+        />
+        <button type="submit">Search</button>
+      </form>
+    </header>
+
+    <main id="weather-info" class="hidden fade-in">
+      <section class="current">
+        <h2 id="location"></h2>
+        <div class="weather-core">
+          <img id="weather-icon" alt="icon" />
+          <div>
+            <h3 id="temperature"></h3>
+            <p id="description"></p>
+          </div>
+        </div>
+        <div class="extra">
+          <p>💧 Humidity: <span id="humidity"></span>%</p>
+          <p>🌬️ Wind: <span id="wind"></span> m/s</p>
+        </div>
+      </section>
+
+      <section class="forecast">
+        <h3>5-Day Forecast</h3>
+        <div id="forecast-container" class="forecast-container"></div>
+      </section>
+    </main>
+
+    <p id="error" class="error hidden"></p>
+  </div>
+
+  <footer>
+    <p>
+      Built with ❤️ using
+      <a href="https://openweathermap.org" target="_blank">OpenWeather API</a>
+    </p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
