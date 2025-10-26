@@ -1,71 +1,60 @@
-const API_KEY = "812c048e7e364cdcbe6a77a2bf929a41"; // 🔑 Replace with your OpenWeather API key
-
-const form = document.getElementById("search-form");
+const apiKey = "812c048e7e364cdcbe6a77a2bf929a41"; // replace with your actual API key
+const weatherContainer = document.getElementById("weather-container");
 const cityInput = document.getElementById("city-input");
-const weatherInfo = document.getElementById("weather-info");
-const errorMsg = document.getElementById("error");
-const locationEl = document.getElementById("location");
-const tempEl = document.getElementById("temperature");
-const descEl = document.getElementById("description");
-const humidityEl = document.getElementById("humidity");
-const windEl = document.getElementById("wind");
-const iconEl = document.getElementById("weather-icon");
-const forecastContainer = document.getElementById("forecast-container");
+const searchBtn = document.getElementById("search-btn");
 
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
+searchBtn.addEventListener("click", () => {
   const city = cityInput.value.trim();
-  if (!city) return;
-
-  errorMsg.classList.add("hidden");
-  weatherInfo.classList.add("hidden");
-  errorMsg.textContent = "";
-
-  try {
-    const geoRes = await fetch(
-      `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${API_KEY}`
-    );
-    const geoData = await geoRes.json();
-    if (geoData.length === 0) throw new Error("City not found");
-
-    const { lat, lon, name, country } = geoData[0];
-
-    const weatherRes = await fetch(
-      `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly,alerts&units=metric&appid=${API_KEY}`
-    );
-    const weatherData = await weatherRes.json();
-
-    displayWeather(name, country, weatherData);
-  } catch (err) {
-    errorMsg.textContent = err.message || "Error fetching weather data";
-    errorMsg.classList.remove("hidden");
+  if (city !== "") {
+    getWeatherData(city);
   }
 });
 
-function displayWeather(city, country, data) {
-  const current = data.current;
-  locationEl.textContent = `${city}, ${country}`;
-  tempEl.textContent = `${Math.round(current.temp)}°C`;
-  descEl.textContent = current.weather[0].description;
-  humidityEl.textContent = current.humidity;
-  windEl.textContent = current.wind_speed.toFixed(1);
-  iconEl.src = `https://openweathermap.org/img/wn/${current.weather[0].icon}@2x.png`;
+async function getWeatherData(city) {
+  try {
+    // Fetch city coordinates from OpenWeather Geocoding API
+    const geoResponse = await fetch(
+      `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${apiKey}`
+    );
+    const geoData = await geoResponse.json();
 
-  forecastContainer.innerHTML = "";
-  data.daily.slice(1, 6).forEach((day) => {
-    const date = new Date(day.dt * 1000);
-    const options = { weekday: "short", day: "numeric" };
+    // ✅ Check if data exists
+    if (!geoData || geoData.length === 0) {
+      weatherContainer.innerHTML = `<p class="error">❌ City not found. Please try another.</p>`;
+      return;
+    }
 
-    const div = document.createElement("div");
-    div.classList.add("forecast-day");
-    div.innerHTML = `
-      <div>${date.toLocaleDateString(undefined, options)}</div>
-      <img src="https://openweathermap.org/img/wn/${day.weather[0].icon}.png" alt="icon">
-      <div>${Math.round(day.temp.max)}° / ${Math.round(day.temp.min)}°</div>
-      <small>${day.weather[0].main}</small>
-    `;
-    forecastContainer.appendChild(div);
-  });
+    const { lat, lon } = geoData[0];
 
-  weatherInfo.classList.remove("hidden");
+    // Fetch weather data
+    const weatherResponse = await fetch(
+      `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`
+    );
+    const weatherData = await weatherResponse.json();
+
+    displayWeather(weatherData);
+  } catch (error) {
+    console.error(error);
+    weatherContainer.innerHTML = `<p class="error">⚠️ Something went wrong. Try again later.</p>`;
+  }
+}
+
+function displayWeather(data) {
+  const {
+    name,
+    main: { temp, humidity },
+    weather,
+    wind: { speed },
+  } = data;
+
+  weatherContainer.innerHTML = `
+    <div class="weather-card">
+      <h2>${name}</h2>
+      <img src="https://openweathermap.org/img/wn/${weather[0].icon}@2x.png" alt="${weather[0].description}">
+      <p class="temp">${temp}°C</p>
+      <p class="desc">${weather[0].description}</p>
+      <p>💨 Wind: ${speed} m/s</p>
+      <p>💧 Humidity: ${humidity}%</p>
+    </div>
+  `;
 }
