@@ -1,4 +1,4 @@
-const apiKey = "812c048e7e364cdcbe6a77a2bf929a41"; // replace with your actual API key
+const apiKey = "812c048e7e364cdcbe6a77a2bf929a41"; // your API key
 const weatherContainer = document.getElementById("weather-container");
 const cityInput = document.getElementById("city-input");
 const searchBtn = document.getElementById("search-btn");
@@ -7,44 +7,55 @@ searchBtn.addEventListener("click", () => {
   const city = cityInput.value.trim();
   if (city !== "") {
     getWeatherData(city);
+  } else {
+    weatherContainer.innerHTML = `<p class="error">⚠️ Please enter a city name.</p>`;
   }
 });
 
 async function getWeatherData(city) {
   try {
-    // Fetch city coordinates from OpenWeather Geocoding API
+    // Fetch city coordinates from Geocoding API
     const geoResponse = await fetch(
       `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${apiKey}`
     );
     const geoData = await geoResponse.json();
 
-    // ✅ Check if data exists
     if (!geoData || geoData.length === 0) {
-      weatherContainer.innerHTML = `<p class="error">❌ City not found. Please try another.</p>`;
+      weatherContainer.innerHTML = `<p class="error">❌ City not found. Try another.</p>`;
       return;
     }
 
     const { lat, lon } = geoData[0];
 
-    // Fetch weather data
+    // Fetch current weather data
     const weatherResponse = await fetch(
       `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`
     );
     const weatherData = await weatherResponse.json();
 
+    if (!weatherResponse.ok || !weatherData.main) {
+      weatherContainer.innerHTML = `<p class="error">⚠️ Unable to fetch weather. Try again.</p>`;
+      return;
+    }
+
     displayWeather(weatherData);
   } catch (error) {
     console.error(error);
-    weatherContainer.innerHTML = `<p class="error">⚠️ Something went wrong. Try again later.</p>`;
+    weatherContainer.innerHTML = `<p class="error">⚠️ Something went wrong. Please try again later.</p>`;
   }
 }
 
 function displayWeather(data) {
+  if (!data || !data.main || !data.weather) {
+    weatherContainer.innerHTML = `<p class="error">⚠️ Weather data unavailable. Try another city.</p>`;
+    return;
+  }
+
   const {
-    name,
-    main: { temp, humidity },
-    weather,
-    wind: { speed },
+    name = "Unknown",
+    main: { temp = "N/A", humidity = "N/A" },
+    weather = [{ description: "N/A", icon: "01d" }],
+    wind: { speed = "N/A" } = {},
   } = data;
 
   weatherContainer.innerHTML = `
