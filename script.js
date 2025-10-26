@@ -14,11 +14,13 @@ searchBtn.addEventListener("click", () => {
 
 async function getWeatherData(city) {
   try {
-    // Fetch city coordinates from Geocoding API
+    console.log("Searching for:", city);
+
     const geoResponse = await fetch(
       `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${apiKey}`
     );
     const geoData = await geoResponse.json();
+    console.log("Geo data:", geoData);
 
     if (!geoData || geoData.length === 0) {
       weatherContainer.innerHTML = `<p class="error">❌ City not found. Try another.</p>`;
@@ -27,11 +29,11 @@ async function getWeatherData(city) {
 
     const { lat, lon } = geoData[0];
 
-    // Fetch current weather data
     const weatherResponse = await fetch(
       `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`
     );
     const weatherData = await weatherResponse.json();
+    console.log("Weather data:", weatherData);
 
     if (!weatherResponse.ok || !weatherData.main) {
       weatherContainer.innerHTML = `<p class="error">⚠️ Unable to fetch weather. Try again.</p>`;
@@ -40,10 +42,11 @@ async function getWeatherData(city) {
 
     displayWeather(weatherData);
   } catch (error) {
-    console.error(error);
-    weatherContainer.innerHTML = `<p class="error">⚠️ Something went wrong. Please try again later.</p>`;
+    console.error("Error fetching weather:", error);
+    weatherContainer.innerHTML = `<p class="error">⚠️ Something went wrong. Check the console.</p>`;
   }
 }
+
 
 function displayWeather(data) {
   if (!data || !data.main || !data.weather) {
