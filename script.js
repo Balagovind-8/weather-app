@@ -1,21 +1,35 @@
-const apiKey = "1ec1a8428fecd108f63c14503def4e42"; // your API key
+ const apiKey = "1ec1a8428fecd108f63c14503def4e42"; // your API key
 const weatherContainer = document.getElementById("weather-container");
 const cityInput = document.getElementById("city-input");
 const searchBtn = document.getElementById("search-btn");
 
-searchBtn.addEventListener("click", () => {
+// ✅ Handle both button click and Enter key press
+searchBtn.addEventListener("click", (event) => {
+  event.preventDefault(); // prevent form reload
+  searchCity();
+});
+
+cityInput.addEventListener("keypress", (event) => {
+  if (event.key === "Enter") {
+    event.preventDefault(); // stop form submission
+    searchCity();
+  }
+});
+
+function searchCity() {
   const city = cityInput.value.trim();
   if (city !== "") {
     getWeatherData(city);
   } else {
     weatherContainer.innerHTML = `<p class="error">⚠️ Please enter a city name.</p>`;
   }
-});
+}
 
 async function getWeatherData(city) {
   try {
     console.log("Searching for:", city);
 
+    // Fetch city coordinates
     const geoResponse = await fetch(
       `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${apiKey}`
     );
@@ -29,6 +43,7 @@ async function getWeatherData(city) {
 
     const { lat, lon } = geoData[0];
 
+    // Fetch weather data
     const weatherResponse = await fetch(
       `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`
     );
@@ -46,7 +61,6 @@ async function getWeatherData(city) {
     weatherContainer.innerHTML = `<p class="error">⚠️ Something went wrong. Check the console.</p>`;
   }
 }
-
 
 function displayWeather(data) {
   if (!data || !data.main || !data.weather) {
