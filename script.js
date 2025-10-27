@@ -1,17 +1,18 @@
- const apiKey = "1ec1a8428fecd108f63c14503def4e42"; // your API key
+
+const apiKey = "1ec1a8428fecd108f63c14503def4e42"; // your API key
 const weatherContainer = document.getElementById("weather-container");
 const cityInput = document.getElementById("city-input");
 const searchBtn = document.getElementById("search-btn");
 
-// ✅ Handle both button click and Enter key press
+// Handle search on button click or Enter key
 searchBtn.addEventListener("click", (event) => {
-  event.preventDefault(); // prevent form reload
+  event.preventDefault();
   searchCity();
 });
 
 cityInput.addEventListener("keypress", (event) => {
   if (event.key === "Enter") {
-    event.preventDefault(); // stop form submission
+    event.preventDefault();
     searchCity();
   }
 });
@@ -27,14 +28,10 @@ function searchCity() {
 
 async function getWeatherData(city) {
   try {
-    console.log("Searching for:", city);
-
-    // Fetch city coordinates
     const geoResponse = await fetch(
       `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${apiKey}`
     );
     const geoData = await geoResponse.json();
-    console.log("Geo data:", geoData);
 
     if (!geoData || geoData.length === 0) {
       weatherContainer.innerHTML = `<p class="error">❌ City not found. Try another.</p>`;
@@ -42,13 +39,10 @@ async function getWeatherData(city) {
     }
 
     const { lat, lon } = geoData[0];
-
-    // Fetch weather data
     const weatherResponse = await fetch(
       `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`
     );
     const weatherData = await weatherResponse.json();
-    console.log("Weather data:", weatherData);
 
     if (!weatherResponse.ok || !weatherData.main) {
       weatherContainer.innerHTML = `<p class="error">⚠️ Unable to fetch weather. Try again.</p>`;
@@ -56,6 +50,7 @@ async function getWeatherData(city) {
     }
 
     displayWeather(weatherData);
+    changeBackground(weatherData.weather[0].main);
   } catch (error) {
     console.error("Error fetching weather:", error);
     weatherContainer.innerHTML = `<p class="error">⚠️ Something went wrong. Check the console.</p>`;
@@ -63,11 +58,6 @@ async function getWeatherData(city) {
 }
 
 function displayWeather(data) {
-  if (!data || !data.main || !data.weather) {
-    weatherContainer.innerHTML = `<p class="error">⚠️ Weather data unavailable. Try another city.</p>`;
-    return;
-  }
-
   const {
     name = "Unknown",
     main: { temp = "N/A", humidity = "N/A" },
@@ -85,4 +75,29 @@ function displayWeather(data) {
       <p>💧 Humidity: ${humidity}%</p>
     </div>
   `;
+}
+
+// 🌈 Dynamic background color change based on weather type
+function changeBackground(condition) {
+  const body = document.body;
+  switch (condition.toLowerCase()) {
+    case "clear":
+      body.style.background = "linear-gradient(135deg, #f9d423, #ff4e50)";
+      break;
+    case "clouds":
+      body.style.background = "linear-gradient(135deg, #bdc3c7, #2c3e50)";
+      break;
+    case "rain":
+    case "drizzle":
+      body.style.background = "linear-gradient(135deg, #74ebd5, #ACB6E5)";
+      break;
+    case "thunderstorm":
+      body.style.background = "linear-gradient(135deg, #232526, #414345)";
+      break;
+    case "snow":
+      body.style.background = "linear-gradient(135deg, #83a4d4, #b6fbff)";
+      break;
+    default:
+      body.style.background = "linear-gradient(135deg, #74b9ff, #a29bfe)";
+  }
 }
