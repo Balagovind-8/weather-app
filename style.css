@@ -1,295 +1,119 @@
-/* 🌈 Aesthetic & Modern CSS for Weather App */
 
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
-
-* {
-  box-sizing: border-box;
+/* --- General Styling --- */
+body {
   margin: 0;
-  padding: 0;
   font-family: "Poppins", sans-serif;
-}
-
-body {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #89f7fe, #66a6ff);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  background: linear-gradient(135deg, #74b9ff, #a29bfe);
   color: #fff;
-  overflow-x: hidden;
-}
-
-.wrapper {
-  width: 90%;
-  max-width: 700px;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(20px);
-  border-radius: 1.5rem;
-  padding: 2rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-  animation: fadeIn 1s ease;
-}
-
-/* HEADER */
-.header {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-.logo {
-  font-size: 2.2rem;
-  font-weight: 600;
-  color: #fff;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
-  letter-spacing: 1px;
-}
-
-.search-box {
-  margin-top: 1rem;
-  display: flex;
-  justify-content: center;
-  gap: 0.5rem;
-}
-
-.search-box input {
-  padding: 0.8rem 1.2rem;
-  border-radius: 0.8rem;
-  border: none;
-  width: 65%;
-  outline: none;
-  background: rgba(255, 255, 255, 0.25);
-  color: #fff;
-  font-size: 1rem;
-  transition: 0.3s ease;
-}
-
-.search-box input::placeholder {
-  color: #f0f0f0;
-}
-
-.search-box input:focus {
-  background: rgba(255, 255, 255, 0.35);
-  box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
-}
-
-.search-box button {
-  padding: 0.8rem 1.5rem;
-  background: #fff;
-  color: #0077ff;
-  border: none;
-  border-radius: 0.8rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.search-box button:hover {
-  background: #0077ff;
-  color: #fff;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-}
-
-/* WEATHER SECTION */
-.current {
-  text-align: center;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 1rem;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-  color: #fff;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-.current h2 {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-  text-transform: capitalize;
-}
-
-.weather-core {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-}
-
-.weather-core img {
-  width: 100px;
-  height: 100px;
-}
-
-.weather-core h3 {
-  font-size: 2.5rem;
-  font-weight: 600;
-}
-
-.weather-core p {
-  text-transform: capitalize;
-  font-weight: 400;
-}
-
-.extra {
-  margin-top: 1rem;
-  font-size: 1rem;
-  display: flex;
-  justify-content: center;
-  gap: 1.5rem;
-}
-
-/* FORECAST */
-.forecast {
-  text-align: center;
-}
-
-.forecast h3 {
-  font-size: 1.3rem;
-  margin-bottom: 1rem;
-  font-weight: 600;
-}
-
-.forecast-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 1rem;
-}
-
-.forecast-day {
-  background: rgba(255, 255, 255, 0.25);
-  border-radius: 0.8rem;
-  padding: 1rem;
-  color: #fff;
-  transition: transform 0.3s ease;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.forecast-day:hover {
-  transform: translateY(-5px);
-  background: rgba(255, 255, 255, 0.35);
-}
-
-.forecast-day img {
-  width: 60px;
-  height: 60px;
-  margin-bottom: 0.3rem;
-}
-
-/* ERROR */
-.error {
-  color: #ffd4d4;
-  text-align: center;
-  font-weight: 500;
-  margin-top: 1rem;
-}
-
-/* FOOTER */
-footer {
-  margin-top: 2rem;
-  color: #f8f9fa;
-  font-size: 0.85rem;
-}
-
-footer a {
-  color: #fff;
-  text-decoration: underline;
-}
-
-.hidden {
-  display: none;
-}
-
-/* ✨ Animations */
-.fade-in {
-  animation: fadeIn 1.2s ease;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(15px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@media (max-width: 600px) {
-  .weather-core h3 {
-    font-size: 2rem;
-  }
-
-  .search-box input {
-    width: 60%;
-  }
-}
-body {
-  background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-  font-family: "Poppins", sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   height: 100vh;
-  margin: 0;
-  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.weather-app {
+.app-container {
+  text-align: center;
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(15px);
   border-radius: 20px;
   padding: 30px;
-  text-align: center;
-  width: 350px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 420px;
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
 }
 
-input {
-  width: 70%;
-  padding: 10px;
+h1 {
+  margin-bottom: 20px;
+  font-size: 1.8rem;
+  letter-spacing: 1px;
+}
+
+/* --- Search Box --- */
+.search-box {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+#city-input {
+  padding: 10px 15px;
+  font-size: 1rem;
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
+  width: 70%;
   outline: none;
 }
 
-button {
-  background: #ffcc00;
+#search-btn {
+  background-color: #0984e3;
+  color: white;
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
   padding: 10px 15px;
   cursor: pointer;
-  font-weight: bold;
-  transition: 0.3s;
+  transition: all 0.3s ease;
 }
 
-button:hover {
-  background: #ffd633;
-  transform: scale(1.05);
+#search-btn:hover {
+  background-color: #74b9ff;
+}
+
+/* --- Weather Card --- */
+.weather-container {
+  margin-top: 10px;
 }
 
 .weather-card {
-  margin-top: 20px;
-  animation: fadeIn 0.8s ease-in-out;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.weather-card img {
+  width: 100px;
+  height: 100px;
+}
+
+.weather-card h2 {
+  margin: 10px 0;
+  font-size: 1.6rem;
 }
 
 .temp {
-  font-size: 2.5em;
+  font-size: 2.5rem;
   font-weight: bold;
+}
+
+.desc {
+  text-transform: capitalize;
+  margin-bottom: 10px;
+  color: #dfe6e9;
 }
 
 .error {
-  color: #ff8080;
-  font-weight: bold;
-  margin-top: 20px;
+  color: #ffeaa7;
+  background: rgba(255, 118, 117, 0.2);
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: 10px;
 }
 
+/* --- Animations --- */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Responsive --- */
+@media (max-width: 480px) {
+  .app-container {
+    padding: 20px;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+
+  h1 {
+    font-size: 1.5rem;
   }
 }
